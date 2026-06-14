@@ -20,5 +20,8 @@ Use those commands:
 2. python robot.py
 3. streamlit run frontend.py   
 
-# Demo
+## Demo
 ![Robot Demo](demo.gif) 
+
+## Full video
+Full project presentation video: https://app.airtimetools.com/recorder/s/z_6JgE2BbaHNdYueJL1H0m
