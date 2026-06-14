@@ -11,7 +11,10 @@ class Robot:
 
     def move(self, target_x, target_y):
             # check battery level before moving
-        if self.battery <= (self.x + self.y + 1):
+        distance_to_target = abs(target_x - self.x) + abs(target_y - self.y)
+        distance_target_base = abs(target_x) + abs(target_y)
+        needed_battery = distance_to_target + distance_target_base
+        if self.battery <= needed_battery:
             self.status = "returning to base"
             print("Battery low. Returning to base.")
             # Code to return to base 

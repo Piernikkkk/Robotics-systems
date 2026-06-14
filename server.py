@@ -8,16 +8,12 @@ from pydantic import BaseModel
 
 load_dotenv()
 app = FastAPI()
-"""
+
 client = OpenAI(
-    base_url="https://openrouter.ai/api/v1/rerank",
+    base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("AI_API_KEY")
     )
-headers={
-    "Authorization": f"Bearer {os.getenv("AI_API_KEY")}",
-    "Content-Type": "application/json"
-}
-"""
+
 
 robot_state = {
     "x": 0,
@@ -32,41 +28,31 @@ class Command(BaseModel):
     command: str
 
 # Endpoint to receive commands from the frontend
-"""
+
 @app.post("/send_command")
 def receive_command(command: Command):
     global robot_state 
     global robot_target
     current_position = f"x: {robot_state['x']}, y: {robot_state['y']}"
 
-    user_message =  (f"You are a robot Valley. Current position: {current_position}."
+    user_message =  ("You are a robot Valley."
                      f"Respond to the user {command} ONLY with a JSON object: {{\"x\": int, \"y\": int}}. No text around."
     )
     
     response = client.chat.completions.create(
-        model = "nvidia/llama-nemotron-rerank-vl-1b-v2:free",
+        model = "gpt-4o-mini",
         messages = [
             {"role": "system", "content": user_message},
-            {"role": "user", "content": command}
+            {"role": "user", "content": f"Current position: {current_position}. Command: {command}"}
         ]
     )
-    ai_json_text = response.choices[0].message.content.strip().replace("```json", "").replace("```", "").strip() # get pure text from AI
-    # Update the robot's target position and status based on the AI response
+    result = json.loads(response.choices[0].message.content) # get pure text from AI
 
-    # Turn JSON text into a Python robot_target 
-    robot_target.update(json.loads(ai_json_text))
+    robot_target["x"] = int(result["x"])
+    robot_target["y"] = int(result["y"])
+
     return robot_target
-"""
 
-#####################################
-@app.post("/send_command")
-def receive_command(command: Command):
-    print(command.command)
-
-    robot_target["x"] = 5
-    robot_target["y"] = 5
-    return robot_target
-#####################################
 
 @app.get("/get_target")
 def get_target():
