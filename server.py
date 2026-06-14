@@ -18,6 +18,9 @@ client = OpenAI(
 robot_state = {
     "x": 0,
     "y": 0,
+    "battery": 100,
+    "status": "waiting",
+    "message": ""
 }
 robot_target = {
     "x": 0,
@@ -69,6 +72,7 @@ def update_state(state: dict):
     robot_state["y"] = int(state.get("y", robot_state["y"]))
     robot_state["battery"] = int(state.get("battery", 100))
     robot_state["status"] = state.get("status", "waiting")
+    robot_state["message"] = state.get("message", "")
     return robot_state
 
 

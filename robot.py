@@ -8,7 +8,7 @@ class Robot:
         self.y = 0
         self.battery = 100
         self.status = "waiting"
-
+        self.message = ""
     def move(self, target_x, target_y):
             # check battery level before moving
         distance_to_target = abs(target_x - self.x) + abs(target_y - self.y)
@@ -16,7 +16,7 @@ class Robot:
         needed_battery = distance_to_target + distance_target_base
         if self.battery <= needed_battery:
             self.status = "returning to base"
-            print("Battery low. Returning to base.")
+            self.message = "Battery low. Returning to base."
             # Code to return to base 
             self.x = 0
             self.y = 0
@@ -53,7 +53,7 @@ class Robot:
 
     def send_state_update(self):
         requests.post("http://127.0.0.1:8000/update_state", json={
-            "x": self.x, "y": self.y, "battery": self.battery, "status": self.status
+            "x": self.x, "y": self.y, "battery": self.battery, "status": self.status, "message": self.message
             })
 
 
