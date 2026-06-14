@@ -3,13 +3,21 @@ from fastapi import FastAPI
 from openai import OpenAI
 from dotenv import load_dotenv
 import json 
+from pydantic import BaseModel
+
 
 load_dotenv()
 app = FastAPI()
+"""
 client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
+    base_url="https://openrouter.ai/api/v1/rerank",
     api_key=os.getenv("AI_API_KEY")
     )
+headers={
+    "Authorization": f"Bearer {os.getenv("AI_API_KEY")}",
+    "Content-Type": "application/json"
+}
+"""
 
 robot_state = {
     "x": 0,
@@ -20,9 +28,13 @@ robot_target = {
     "y": 0,
 }
 
+class Command(BaseModel):
+    command: str
+
 # Endpoint to receive commands from the frontend
+"""
 @app.post("/send_command")
-def receive_command(command: str):
+def receive_command(command: Command):
     global robot_state 
     global robot_target
     current_position = f"x: {robot_state['x']}, y: {robot_state['y']}"
@@ -32,7 +44,7 @@ def receive_command(command: str):
     )
     
     response = client.chat.completions.create(
-        model = "meta-llama/llama-3-8b-instruct:free",
+        model = "nvidia/llama-nemotron-rerank-vl-1b-v2:free",
         messages = [
             {"role": "system", "content": user_message},
             {"role": "user", "content": command}
@@ -44,16 +56,31 @@ def receive_command(command: str):
     # Turn JSON text into a Python robot_target 
     robot_target.update(json.loads(ai_json_text))
     return robot_target
+"""
+
+#####################################
+@app.post("/send_command")
+def receive_command(command: Command):
+    print(command.command)
+
+    robot_target["x"] = 5
+    robot_target["y"] = 5
+    return robot_target
+#####################################
 
 @app.get("/get_target")
 def get_target():
-    global robot_target
     return robot_target
+
+@app.get("/get_state")
+def get_state():
+    return robot_state
 
 @app.post("/update_state")
 def update_state(state: dict):
     global robot_state
-    robot_state.update(state)
+    robot_state["x"] = int(state.get("x", robot_state["x"]))
+    robot_state["y"] = int(state.get("y", robot_state["y"]))
     return robot_state
 
 
