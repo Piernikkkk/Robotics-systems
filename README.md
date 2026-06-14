@@ -1,6 +1,6 @@
 # AI robot Valley.
 This project is a way of interactive control of a robot named Valley.
-The projects is written in Python language, using LLM ("Meta-Llama") to translate natural human speach into clear commands for the bot.
+The projects is written in Python language, using LLM ("gpt-4o-mini") to translate natural human speach into clear commands for the bot.
 Valley can move forward, back, left and right ("for example: move forward steps", steps", rove to (5,5), go back 2 steps, etc.")
 Valley has a battery, if there,s a risk of it running out, Valley will return back to the base.
 
