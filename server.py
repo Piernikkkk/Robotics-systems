@@ -81,6 +81,8 @@ def update_state(state: dict):
     global robot_state
     robot_state["x"] = int(state.get("x", robot_state["x"]))
     robot_state["y"] = int(state.get("y", robot_state["y"]))
+    robot_state["battery"] = int(state.get("battery", 100))
+    robot_state["status"] = state.get("status", "waiting")
     return robot_state
 
 

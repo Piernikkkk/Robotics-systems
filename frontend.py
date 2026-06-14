@@ -21,9 +21,10 @@ def show_position():
     data = response.json()
     x_position = data.get("x", 0)
     y_position = data.get("y", 0)
+    battery_level = data.get("battery", 100)
+    status = data.get("status", "waiting")
 
-
-    st.write(f"Current Position: (x:{x_position}, y:{y_position})")
+    st.write(f"Current Position: (x:{x_position}, y:{y_position}, Battery: {battery_level}%, Status: {status})")
 show_position()
 
 

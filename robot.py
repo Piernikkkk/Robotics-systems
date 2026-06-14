@@ -44,13 +44,13 @@ class Robot:
             self.send_state_update()
             time.sleep(1)
 
-            self.status = "at the target"
-            print(f"Right here! Position: ({self.x}, {self.y}),\nBattery: {self.battery}%, Status: {self.status}")
+        self.status = "at the target"
+        self.send_state_update()
 
 
     def send_state_update(self):
         requests.post("http://127.0.0.1:8000/update_state", json={
-            "x": self.x, "y": self.y
+            "x": self.x, "y": self.y, "battery": self.battery, "status": self.status
             })
 
 
