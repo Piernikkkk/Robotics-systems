@@ -14,4 +14,11 @@ Valley has a battery, if there,s a risk of it running out, Valley will return ba
 ---
 
 # Run the project.
-Create a enfile and add your OpenRouter AT API_KEY
+Create a .env file and add your OpenRouter AT API_KEY.
+Use those commands:
+1. uvicorn server:app --reload 
+2. python robot.py
+3. streamlit run frontend.py   
+
+# Demo
+![Robot Demo](demo.gif) 
