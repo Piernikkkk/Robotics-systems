@@ -15,16 +15,16 @@ if st.button("Enter"):
 
 st.write("---")
 
-st.fragment(run_every=1)
-def show_position():
-    response = requests.get("http://127.0.0.1:8000/get_state")
-    data = response.json()
-    x_position = data.get("x", 0)
-    y_position = data.get("y", 0)
-    battery_level = data.get("battery", 100)
-    status = data.get("status", "waiting")
-
-    st.write(f"Current Position: (x:{x_position}, y:{y_position}, Battery: {battery_level}%, Status: {status})")
-show_position()
-
-
+placeholder = st.empty()
+while True:
+    try:
+        response = requests.get("http://127.0.0.1:8000/get_state")
+        data = response.json()
+        with placeholder.container():
+            st.write(f"x: {data.get('x', 0)}")
+            st.write(f"y: {data.get('y', 0)}")
+            st.write(f"battery: {data.get('battery', 100)}%")
+            st.write(f"status: {data.get('status')}")
+    except Exception as e:
+        st.error(f"Serever error: {e}")
+    time.sleep(1)
